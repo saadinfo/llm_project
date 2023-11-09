@@ -71,4 +71,4 @@ if uploaded_file and question and openai_api_key:
 
 
     st.write("### Answer")
-    st.write(rqa(question))
+    st.write(rqa(question)['result'])
