@@ -9,12 +9,6 @@ Current examples include:
 - Chatbot
 - File Q&A
 
-d paste the API key into the text box as follows:
-
-```sh
-OPENAI_API_KEY='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'
-```
-
 ## Run it locally
 
 ```sh
