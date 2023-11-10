@@ -7,7 +7,8 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
-
+from tempfile import NamedTemporaryFile
+import os
 
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", type="password")
@@ -27,10 +28,18 @@ if uploaded_file and question and not openai_api_key:
 
 
 if uploaded_file and question and openai_api_key:
-   doc_reader = PyPDFLoader(uploaded_file)
+   
+   bytes_data = uploaded_file.read()
+   with NamedTemporaryFile(delete=False) as tmp:  # open a named temporary file
+    tmp.write(bytes_data)                      # write data from the uploaded file into it
+    documents = PyPDFLoader(tmp.name).load()        # <---- now it works!
+   os.remove(tmp.name)                            # remove temp file
+
+
+   #documents = loader.load()
    
    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-   texts = text_splitter.split_documents(uploaded_file)
+   texts = text_splitter.split_documents(documents)
    
    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
    docsearch = Chroma.from_documents(texts, embeddings)
