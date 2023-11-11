@@ -10,3 +10,4 @@ tiktoken
 PyPDF2 
 faiss-cpu
 pypdf
+chromadb
